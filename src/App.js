@@ -1,23 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import { fetchProducts } from "./Data/GetData";
+import HeroSection from "./Components/HeroSection/HeroSection";
+import ProductList from "./Components/ProductSection/ProductList";
 
 function App() {
+  const [productData, setProductData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const data = await fetchProducts();
+        setProductData(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+      setIsLoading(false);
+    };
+
+    loadData();
+  }, [setProductData]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='container mx-auto p-4 my-10'>
+      <HeroSection
+        productData={productData}
+        setProductData={setProductData}
+        isLoading={isLoading}
+      />
+
+      <ProductList
+        productData={productData}
+        isLoading={isLoading}
+      />
     </div>
   );
 }
