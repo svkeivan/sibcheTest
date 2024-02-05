@@ -1,6 +1,15 @@
 import React from "react";
+import { useQuery } from "react-query";
+import { fetchProduct } from "../../Data/GetData";
+import ProductSectionSkeleton from "./ProductSectionSkeleton";
 
-const ProductSection = ({ product }) => {
+const ProductSection = ({ productId }) => {
+  const { data: product, isLoading } = useQuery(["product", productId], () =>
+    fetchProduct(productId),
+  );
+  if (isLoading) {
+    return <ProductSectionSkeleton />;
+  }
   return (
     <div className='py-12 my-5'>
       <div className='max-w-2xl mx-auto px-4 sm:px-6 lg:px-8'>
