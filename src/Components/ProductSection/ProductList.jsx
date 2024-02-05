@@ -1,33 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ProductSection from "./ProductSection";
 import ProductSectionSkeleton from "./ProductSectionSkeleton";
-import { fetchProduct } from "../../Data/GetData";
 
 const ProductList = ({ productData, isLoading }) => {
-  const [activeProduct, setActiveProduct] = useState();
-  const [selectedId, setSelectedId] = useState(0);
-  const [changeLoading, setChangeLoading] = useState(false); //use for change loading state
-  useEffect(() => {
-    if (!isLoading && productData.length > 0) {
-      setActiveProduct(productData[0]);
-    }
-  }, [isLoading, productData]);
-
-  //Just for mentioned in the task, we had this data from 'productData'
-  useEffect(() => {
-    const loadData = async () => {
-      setChangeLoading(true);
-      try {
-        const data = await fetchProduct(selectedId);
-        setActiveProduct(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-      setChangeLoading(false);
-    };
-
-    loadData();
-  }, [selectedId]);
+  const [selectedId, setSelectedId] = useState(1);
 
   const skeleton = (
     <div className='flex flex-col items-start justify-center rounded-xl overflow-hidden my-2 shadow-md p-2 cursor-pointer '>
@@ -88,11 +64,7 @@ const ProductList = ({ productData, isLoading }) => {
           </div>
         </div>
         <div className='md:w-2/3 w-full my-5'>
-          {changeLoading ? (
-            <ProductSectionSkeleton />
-          ) : (
-            <ProductSection product={activeProduct} />
-          )}
+          <ProductSection productId={selectedId} />
         </div>
       </div>
     </div>
